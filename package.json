@@ -6,7 +6,7 @@
   "homepage": "https://github.com/kentcdodds/testing-node-apps",
   "license": "GPL-3.0-only",
   "engines": {
-    "node": ">=12",
+    "node": ">=10",
     "npm": ">=6"
   },
   "dependencies": {
