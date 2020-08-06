@@ -1,16 +1,23 @@
 import cases from 'jest-in-case'
 import {isPasswordAllowed} from '../auth'
 
+function casify(obj) {
+  return Object.entries(obj).map(([name, password]) => {
+    return {
+      name: `${password} - ${name}`,
+      password,
+    }
+  })
+}
+
 cases(
   'isPasswordAllowed: valid passwords',
   (options) => {
     expect(isPasswordAllowed(options.password)).toBe(true)
   },
-  {
-    'valid password': {
-      password: 'aBc123!',
-    },
-  },
+  casify({
+    'valid password': 'aBc123!',
+  }),
 )
 
 cases(
@@ -18,33 +25,12 @@ cases(
   (options) => {
     expect(isPasswordAllowed(options.password)).toBe(false)
   },
-  {
-    'too short': {
-      password: 'aC3!',
-    },
-  },
+  casify({
+    'too short': 'a2c!',
+    'no alpha': '123456!',
+    'no numbers': 'ABCdef!',
+    'no uppercase': 'abc123!',
+    'no lowercase': 'ABC123!',
+    'no non-alpha': 'abcDEF123',
+  }),
 )
-
-describe('isPasswordAllowed only allows some passwords', () => {
-  const allowedPasswords = ['aBc123!']
-  const disallowedPasswords = [
-    'a2c!',
-    '123456!',
-    'ABCdef!',
-    'abc123!',
-    'ABC123!',
-    'abcDEF123',
-  ]
-
-  allowedPasswords.forEach((password) => {
-    test(`allows ${password}`, () => {
-      expect(isPasswordAllowed(password)).toBe(true)
-    })
-  })
-
-  disallowedPasswords.forEach((password) => {
-    test(`disallows ${password}`, () => {
-      expect(isPasswordAllowed(password)).toBe(false)
-    })
-  })
-})
