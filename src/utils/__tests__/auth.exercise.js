@@ -1,4 +1,29 @@
+import cases from 'jest-in-case'
 import {isPasswordAllowed} from '../auth'
+
+cases(
+  'isPasswordAllowed: valid passwords',
+  (options) => {
+    expect(isPasswordAllowed(options.password)).toBe(true)
+  },
+  {
+    'valid password': {
+      password: 'aBc123!',
+    },
+  },
+)
+
+cases(
+  'isPasswordAllowed: invalid passwords',
+  (options) => {
+    expect(isPasswordAllowed(options.password)).toBe(false)
+  },
+  {
+    'too short': {
+      password: 'aC3!',
+    },
+  },
+)
 
 describe('isPasswordAllowed only allows some passwords', () => {
   const allowedPasswords = ['aBc123!']
