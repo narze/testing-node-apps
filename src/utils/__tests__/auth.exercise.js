@@ -1,36 +1,25 @@
 import {isPasswordAllowed} from '../auth'
 
-test('isPasswordAllowed returns false if password is too short', () => {
-  const result = isPasswordAllowed('a2c!')
-  expect(result).toBeFalsy()
-})
+describe('isPasswordAllowed only allows some passwords', () => {
+  const allowedPasswords = ['aBc123!']
+  const disallowedPasswords = [
+    'a2c!',
+    '123456!',
+    'ABCdef!',
+    'abc123!',
+    'ABC123!',
+    'abcDEF123',
+  ]
 
-test('isPasswordAllowed returns false if password has no alphavet', () => {
-  const result = isPasswordAllowed('123456!')
-  expect(result).toBeFalsy()
-})
+  allowedPasswords.forEach((password) => {
+    test(`allows ${password}`, () => {
+      expect(isPasswordAllowed(password)).toBe(true)
+    })
+  })
 
-test('isPasswordAllowed returns false if password has no numbers', () => {
-  const result = isPasswordAllowed('ABCdef!')
-  expect(result).toBeFalsy()
-})
-
-test('isPasswordAllowed returns false if password has no uppercase letters', () => {
-  const result = isPasswordAllowed('abc123!')
-  expect(result).toBeFalsy()
-})
-
-test('isPasswordAllowed returns false if password has no lowercase letters', () => {
-  const result = isPasswordAllowed('ABC123!')
-  expect(result).toBeFalsy()
-})
-
-test('isPasswordAllowed returns false if password has no non-alpha letters', () => {
-  const result = isPasswordAllowed('abcDEF123')
-  expect(result).toBeFalsy()
-})
-
-test('isPasswordAllowed returns true if password is valid', () => {
-  const result = isPasswordAllowed('aBc123!')
-  expect(result).toBeTruthy()
+  disallowedPasswords.forEach((password) => {
+    test(`disallows ${password}`, () => {
+      expect(isPasswordAllowed(password)).toBe(false)
+    })
+  })
 })
